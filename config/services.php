@@ -31,9 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'esim' => [
-    'base_url' => env('ESIM_BASE_URL'),
-    'api_key' => env('ESIM_API_KEY'),
-],
+        'base_url' => env('ESIM_BASE_URL'),
+        'token' => env('ESIM_TOKEN'),
+    ],
 
 
 ];
