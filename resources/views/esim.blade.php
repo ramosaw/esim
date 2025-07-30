@@ -297,34 +297,34 @@ createApp({
             this.fetchPackages();
         },
         fetchPackages() {
-            this.loading = true;
-            axios.get('/api/coverages/' + this.selectedCountry)
-                .then(res => {
-                    this.packages = res.data.coverages;
-                    // Eğer API'den gelen paket yoksa, popüler paketleri göster
-                    if (this.packages.length === 0) {
-                        this.packages = this.getPopularPackages(this.selectedCountry);
-                    }
-                })
-                .catch(error => {
-                    console.error("Paketler yüklenirken hata:", error);
-                    this.packages = this.getPopularPackages(this.selectedCountry);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
+    this.loading = true;
+    axios.get('/api/coverages/' + this.selectedCountry)
+        .then(res => {
+            // API yanıtı doğrudan res.data içinde geliyor
+            // coverages dizisine erişiyoruz
+            this.packages = res.data?.coverages || [];
+            
+            // Eğer API'den gelen paket yoksa, popüler paketleri göster
+            if (this.packages.length === 0) {
+                this.packages = this.getPopularPackages(this.selectedCountry);
+            }
+        })
+        .catch(error => {
+            console.error("Paketler yüklenirken hata:", error);
+            this.packages = this.getPopularPackages(this.selectedCountry);
+        })
+        .finally(() => {
+            this.loading = false;
+        });
+},
         getPopularPackages(countryCode) {
             const popularPackages = {
                 'ALL': [
                     {id: 1, title: 'Avrupa 7GB Paketi', data_amount: 7, validity_period: 30, amount: 29.99, api_id: 'eu_7gb'},
                     {id: 2, title: 'Avrupa 15GB Paketi', data_amount: 15, validity_period: 30, amount: 49.99, api_id: 'eu_15gb'},
                     {id: 3, title: 'Avrupa 30GB Paketi', data_amount: 30, validity_period: 30, amount: 69.99, api_id: 'eu_30gb'}
-                ],
-                'TR': [
-                    {id: 4, title: 'Türkiye 10GB Paketi', data_amount: 10, validity_period: 30, amount: 19.99, api_id: 'tr_10gb'},
-                    {id: 5, title: 'Türkiye 20GB Paketi', data_amount: 20, validity_period: 30, amount: 29.99, api_id: 'tr_20gb'}
                 ]
+                
             };
             return popularPackages[countryCode] || popularPackages['ALL'];
         },
